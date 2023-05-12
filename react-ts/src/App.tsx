@@ -8,7 +8,7 @@ function App() {
   const [ todos, setTodos ] = useState<Todo[]>([]);
 
   /**
-   * todo 추가
+   * todo 추가 이벤트
    * 
    * @param todoText 입력한 text
    */
