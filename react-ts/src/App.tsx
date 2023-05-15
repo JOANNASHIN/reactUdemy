@@ -17,10 +17,22 @@ function App() {
     setTodos([...todos, newTodo]);
   }
 
+  /**
+   * todo 삭제 이벤트
+   */
+  const removeTodoHandler = (todoId: string) => {
+    setTodos((prevTodos) => {
+      return prevTodos.filter(todo => todo.id !== todoId);
+    });
+  }
+
   return (
     <div>
       <NewTodo onAddTodo={addTodoHandler}/>
-      <Todos items={todos} />
+      <Todos 
+        items={todos} 
+        onRemoveTodo={removeTodoHandler}
+      />
     </div>
   );
 }

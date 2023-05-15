@@ -9,12 +9,17 @@ import TodoItem from "./TodoItem";
 interface Props {
     items: Todo[];
     children?: ReactNode;
+    onRemoveTodo: (id: string) => void;
 }
 
 const Todos:React.FC<Props> = (props) => {
     return <ul>
-        {props.items?.length && props.items.map(item => (
-          <TodoItem item={item} key={item.id}/>
+        {props.items && props.items.map(item => (
+          <TodoItem 
+            item={item} 
+            key={item.id}
+            onRemoveTodo={props.onRemoveTodo.bind(null, item.id)}
+        />
         ))}
     </ul>
 }
