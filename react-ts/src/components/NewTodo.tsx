@@ -1,9 +1,11 @@
-import { ChangeEvent, useRef, useState } from 'react';
+import { ChangeEvent, useContext, useRef, useState } from 'react';
 import classes from './NewTodo.module.css';
+import { TodosContext } from '../store/todos-context';
 
-const NewTodo:React.FC<{ onAddTodo: (text: string) => void }> = (props) => {
+const NewTodo:React.FC = () => {
     const todoTextInputRef = useRef<HTMLInputElement>(null);
     const [ inputValue, setInputValue ] = useState<string>('');
+    const { addTodo } = useContext(TodosContext);
 
     /**
      * update input value
@@ -24,7 +26,7 @@ const NewTodo:React.FC<{ onAddTodo: (text: string) => void }> = (props) => {
         }
 
         // event 전달
-        props.onAddTodo(enteredText);
+        addTodo(enteredText);
 
         // input 값 reset
         setInputValue('');
