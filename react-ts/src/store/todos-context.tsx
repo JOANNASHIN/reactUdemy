@@ -7,15 +7,15 @@ interface TodosContextObj {
     removeTodo: (id: string) => void;
 }
 
+interface Props {
+  children: React.ReactNode;
+}
+
 export const TodosContext = React.createContext<TodosContextObj>({
     items: [],
     addTodo: () => {},
     removeTodo: (id) => {}
 });
-
-interface Props {
-    children: React.ReactNode;
-}
 
 const TodosContextProvider: React.FC<Props> = (props) => {
     const [ todos, setTodos ] = useState<Todo[]>([]);
