@@ -33,12 +33,16 @@ const Login = (props) => {
   //   };
   // }, [enteredEmail, enteredPassword]);
 
+  useEffect(() =>{
+    setFormIsValid(
+      enteredEmail.includes('@') && enteredPassword.trim().length > 6
+    );
+  }, [enteredEmail, enteredPassword])
+
   const emailChangeHandler = (event) => {
     setEnteredEmail(event.target.value);
 
-    setFormIsValid(
-      event.target.value.includes('@') && enteredPassword.trim().length > 6
-    );
+   
   };
 
   const passwordChangeHandler = (event) => {
