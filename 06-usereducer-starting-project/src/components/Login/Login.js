@@ -15,10 +15,10 @@ const emailReducer = (state, action) => {
   }
 
   //check validate
-  if (action.type === 'INPUT_BLUR') {
+  if (action.type === 'USER_BLUR') {
     return {
       value: state.value,
-      isValid: state.valud.includes('@'),
+      isValid: state.value.includes('@'),
     }    
   }
 
@@ -58,18 +58,19 @@ const Login = (props) => {
   const [emailState, dispatchEmail] = useReducer(emailReducer, { value: '', isValid: null });
   const [passwordState, dispatchPassword] = useReducer(passwordReducer, { value: '', isValid: null });
 
-  // useEffect(() =>{
-  //   const test  = setTimeout(() =>{
-  //     setFormIsValid(
-  //       emailState.value.includes('@') && enteredPassword.trim().length > 6
-  //     );
-  //   }, 500)
+  useEffect(() =>{
+    const identifier  = setTimeout(() => {
+      console.log('Checking Form validity', emailState.isValid)
+      setFormIsValid(
+        emailState.isValid && passwordState.isValid
+      );
+    }, 500)
 
-  //   return () => {
-  //     console.log('cleaned')
-  //     clearTimeout(test);
-  //   }
-  // }, [enteredEmail, enteredPassword])
+    return () => {
+      console.log('CLEAN UP')
+      clearTimeout(identifier);
+    }
+  }, [emailState, passwordState])
 
   const emailChangeHandler = (event) => {
     // setEnteredEmail(event.target.value);
@@ -82,7 +83,12 @@ const Login = (props) => {
       val: event.target.value
     })
     
-    setFormIsValid(event.target.includes('@') && passwordState.isValid)
+    /**
+     * MEMO: 여기서 emailState.value나 emailState.isValid를 사용하지 않고 
+     * event.target.value를 사용하는 이유는
+     * 콘솔로 찍어보면 아직 업데이트 되지 않았기 때문 !! -> 그래서 해결방법으로 useEffect로 처리 !!
+     */
+    // setFormIsValid(event.target.value.includes('@') && passwordState.isValid)
   };
 
   const passwordChangeHandler = (event) => {
@@ -92,25 +98,24 @@ const Login = (props) => {
     // );
     
     dispatchPassword({type: 'USER_INPUT', val: event.target.value});
-    setFormIsValid(
-      emailState.isValid && event.target.value.trim().length > 6
-    );
-
-
+    // setFormIsValid(
+    //   emailState.isValid && event.target.value.trim().length > 6
+    // );
   };
 
   const validateEmailHandler = () => {
     // setEmailIsValid(emailState.isValid);
-    dispatchEmail({type: 'INPUT_BLUR'})
+    dispatchEmail({type: 'USER_BLUR'})
   };
 
   const validatePasswordHandler = () => {
     // setPasswordIsValid(enteredPassword.trim().length > 6);
-    dispatchPassword({type: 'INPUT_BLUR'});
+    dispatchPassword({type: 'USER_BLUR'});
   };
 
   const submitHandler = (event) => {
     event.preventDefault();
+    console.log('submit')
     props.onLogin(emailState.value, passwordState.value);
   };
 
@@ -145,6 +150,7 @@ const Login = (props) => {
             onBlur={validatePasswordHandler}
           />
         </div>
+        {passwordState.value}
         <div className={classes.actions}>
           <Button type="submit" className={classes.btn} disabled={!formIsValid}>
             Login
