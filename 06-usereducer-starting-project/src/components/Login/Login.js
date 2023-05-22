@@ -58,11 +58,14 @@ const Login = (props) => {
   const [emailState, dispatchEmail] = useReducer(emailReducer, { value: '', isValid: null });
   const [passwordState, dispatchPassword] = useReducer(passwordReducer, { value: '', isValid: null });
 
+  const { isValid: emailIsValid } = emailState;
+  const { isValid: passwordIsValid } = passwordState;
+
   useEffect(() =>{
     const identifier  = setTimeout(() => {
-      console.log('Checking Form validity', emailState.isValid)
+      console.log('Checking Form validity')
       setFormIsValid(
-        emailState.isValid && passwordState.isValid
+        emailIsValid && passwordIsValid
       );
     }, 500)
 
@@ -70,7 +73,8 @@ const Login = (props) => {
       console.log('CLEAN UP')
       clearTimeout(identifier);
     }
-  }, [emailState, passwordState])
+  }, [emailIsValid, passwordIsValid])
+  // }, [emailState, passwordState]) // 이렇게 하면 값이 변경될때에도 유효성 검증이 중복으로 일어나기때문에 isValid로 변경
 
   const emailChangeHandler = (event) => {
     // setEnteredEmail(event.target.value);
